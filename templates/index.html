@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Repo Search</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">GitHub Repo Search Tool</h1>
+        <div class="mb-3">
+            <input type="text" id="searchInput" class="form-control" placeholder="Enter keyword/topic">
+            <button class="btn btn-primary mt-3" onclick="searchRepos()">Search</button>
+        </div>
+        <div id="results"></div>
+        <button id="saveFavoritesBtn" class="btn btn-success mt-3" style="display: none;" onclick="saveFavorites()">Save Favorites</button>
+    </div>
+
+    <script>
+        let favorites = [];
+
+        // Search for repositories
+        async function searchRepos() {
+            const keyword = document.getElementById('searchInput').value;
+            const resultsDiv = document.getElementById('results');
+            const saveFavoritesBtn = document.getElementById('saveFavoritesBtn');
+
+            if (!keyword) {
+                alert("Please enter a keyword.");
+                return;
+            }
+
+            resultsDiv.innerHTML = '<p>Searching...</p>';
+            saveFavoritesBtn.style.display = 'none';
+
+            try {
+                const response = await fetch(`/search?keyword=${encodeURIComponent(keyword)}`);
+                const repos = await response.json();
+
+                if (response.ok) {
+                    resultsDiv.innerHTML = repos.map((repo, index) => `
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">${index + 1}. ${repo.name}</h5>
+                                <p class="card-text">Stars: ${repo.stargazers_count}, Forks: ${repo.forks_count}</p>
+                                <p class="card-text">${repo.description || "No description available"}</p>
+                                <button id="fav-btn-${index}" class="btn btn-outline-secondary" onclick="addToFavorites(${index}, this)">Add to Favorites</button>
+                            </div>
+                        </div>
+                    `).join('');
+
+                    favorites = repos;
+                    saveFavoritesBtn.style.display = 'block';
+                } else {
+                    resultsDiv.innerHTML = `<p class="text-danger">${repos.error || "An error occurred"}</p>`;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `<p class="text-danger">Failed to fetch repositories.</p>`;
+            }
+        }
+
+        // Add a repository to favorites
+        function addToFavorites(index, button) {
+            const selectedRepo = favorites[index];
+            if (!selectedRepo) return;
+
+            // Change button text to "Added to Favorites"
+            button.innerHTML = "Added to Favorites";
+            button.classList.remove("btn-outline-secondary");
+            button.classList.add("btn-success");
+            button.disabled = true;
+
+            alert(`"${selectedRepo.name}" added to favorites!`);
+        }
+
+        // Save favorites to the server
+        async function saveFavorites() {
+            try {
+                const response = await fetch('/favorites', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(favorites)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(result.message);
+                } else {
+                    alert(result.error || "Failed to save favorites.");
+                }
+            } catch (error) {
+                alert("Error saving favorites.");
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
