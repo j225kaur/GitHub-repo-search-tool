@@ -20,7 +20,7 @@
     <script>
         let favorites = [];
 
-        // Search for repositories
+        // Searching for repositories
         async function searchRepos() {
             const keyword = document.getElementById('searchInput').value;
             const resultsDiv = document.getElementById('results');
@@ -60,12 +60,12 @@
             }
         }
 
-        // Add a repository to favorites
+        // Adding a repository to favorites
         function addToFavorites(index, button) {
             const selectedRepo = favorites[index];
             if (!selectedRepo) return;
 
-            // Change button text to "Added to Favorites"
+            // Changing the button text to "Added to Favorites"
             button.innerHTML = "Added to Favorites";
             button.classList.remove("btn-outline-secondary");
             button.classList.add("btn-success");
@@ -74,7 +74,7 @@
             alert(`"${selectedRepo.name}" added to favorites!`);
         }
 
-        // Save favorites to the server
+        // Saving favorites to the server
         async function saveFavorites() {
             try {
                 const response = await fetch('/favorites', {

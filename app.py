@@ -33,28 +33,26 @@ def search_repositories():
 
 @app.route('/save_favorites', methods=['POST'])
 def save_favorites():
-    data = request.get_json()  # Get JSON data from the request
+    data = request.get_json()  
     file_name = "favorites.json"
 
-    # Validate data
+    # Validating the data
     if not data or not isinstance(data, list):
         return jsonify({"error": "Invalid data format"}), 400
 
-    # Check if the file exists
+    # Checking if the file exists
     if os.path.exists(file_name):
         with open(file_name, "r") as file:
             try:
                 existing_favorites = json.load(file)
             except json.JSONDecodeError:
-                # Handle corrupted or invalid JSON
                 existing_favorites = []
     else:
         existing_favorites = []
 
-    # Append new favorites, avoiding duplicates
+
     existing_favorites.extend(repo for repo in data if repo not in existing_favorites)
 
-    # Save updated favorites back to the file
     with open(file_name, "w") as file:
         json.dump(existing_favorites, file, indent=4)
 
