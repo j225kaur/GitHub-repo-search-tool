@@ -1,19 +1,19 @@
-# 🔍 GitHub Repo Search Tool
+# GitHub Repo Search Tool
 
 The GitHub Repo Search Tool is a web-based application built with **Flask** and **Bootstrap** that allows users to search GitHub repositories by keyword, view key metadata (stars, forks, descriptions), and save selected repositories as favorites.
 
 ---
 
-## 🌟 Features
+## Features
 
-- 🔎 **Search GitHub Repos**: Enter a keyword/topic to retrieve the top 10 most-starred repositories.
-- 📊 **View Metadata**: See repository stars, forks, and descriptions in a clean UI.
-- ❤️ **Save Favorites**: Add selected repositories to your favorites and persist them to a local JSON file.
-- ⚡ **Interactive Frontend**: Built with Bootstrap and JavaScript for a smooth user experience.
+- **Search GitHub Repos**: Enter a keyword/topic to retrieve the top 10 most-starred repositories.
+- **View Metadata**: See repository stars, forks, and descriptions in a clean UI.
+- **Save Favorites**: Add selected repositories to your favorites and persist them to a local JSON file.
+- **Interactive Frontend**: Built with Bootstrap and JavaScript for a smooth user experience.
 
 ---
 
-## 🖥️ Technologies Used
+## Technologies Used
 
 - **Backend**: Python, Flask
 - **Frontend**: HTML, CSS (Bootstrap 5), JavaScript
